@@ -6,7 +6,7 @@ class UsersController < ApplicationController
         user = User.create(user_params)
         if user.valid?
             token = encode_token({user_id: user.id})
-            render json: {user: user, token: token}
+            render json: user, except: [:password_digest]
         else
             render json: {messages: user.errors.full_messages}, status: :internal_server_error
         end
@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 
         if user && user.authenticate(params[:password]) 
             token = encode_token({user_id: user.id})
-            render json: {user: @user, token: token}
+            render json: user, except: [:password_digest]
         else
             render json: {messages: user.error.full_messages}, status: :unauthorized
         end
