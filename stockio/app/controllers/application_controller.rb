@@ -3,9 +3,11 @@ class ApplicationController < ActionController::API
     before_action :authorize
     
     SECRET_KEY = "stockio-secret-io"
+    EXPIRY_TIME_IN_SECONDS = 18000 # Token expires after 5 hrs of initial login
 
-    def encode_token(token)
-        JWT.encode(token, SECRET_KEY)
+    def encode_token(payload)
+        payload[:exp] = Time.now.to_i + EXPIRY_TIME_IN_SECONDS
+        JWT.encode(payload, SECRET_KEY)
     end
 
     def auth_header

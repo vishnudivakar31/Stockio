@@ -3,6 +3,7 @@ class UsersController < ApplicationController
     before_action :authorize, except: [:signup, :login]
 
     AUTHORIZATION_HEADER = "Authorization"
+    TOKEN_EXPIRATION_HEADER = "Token Expiring Time"
     TOKEN_PREFIX = "Bearer"
 
     def signup
@@ -10,6 +11,7 @@ class UsersController < ApplicationController
         if user.valid?
             token = "#{TOKEN_PREFIX} #{encode_token({user_id: user.id})}"
             response.headers[AUTHORIZATION_HEADER] = token
+            response.headers[TOKEN_EXPIRATION_HEADER] = token_expiry_time
             render json: user, except: [:password_digest]
         else
             render json: {messages: user.errors.full_messages}, status: :internal_server_error
@@ -22,9 +24,10 @@ class UsersController < ApplicationController
         if user && user.authenticate(params[:password]) 
             token = "#{TOKEN_PREFIX} #{encode_token({user_id: user.id})}"
             response.headers[AUTHORIZATION_HEADER] = token
+            response.headers[TOKEN_EXPIRATION_HEADER] = token_expiry_time
             render json: user, except: [:password_digest]
         else
-            render json: {messages: user.error.full_messages}, status: :unauthorized
+            render json: {messages: "unable to find account"}, status: :unauthorized
         end
     end
 
@@ -52,6 +55,10 @@ class UsersController < ApplicationController
 
     def user_params
         params.except(:user).permit(:username, :password, :email, :dob)
+    end
+
+    def token_expiry_time
+        (Time.now.to_i + EXPIRY_TIME_IN_SECONDS) * (10 ** 3)
     end
 
 end
