@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   patch "/user/update", to: "users#update"
   delete "/user", to: "users#delete"
   #######################################
+  get "/stocks/showall", to: "stocks#showall"
   resources :stocks
 end
