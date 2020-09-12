@@ -7,4 +7,11 @@ class StockService
         RestClient.get api, accept: :json
     end
 
+    def search(stock_name)
+        regex = Regexp.new("^#{stock_name}", Regexp::EXTENDED | Regexp::IGNORECASE)
+        all_stocks = showall()
+        stock_json = JSON.parse(all_stocks.body)["data"]
+        stock_json.select {|stock| regex.match(stock["name"])}
+    end
+
 end

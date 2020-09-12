@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   delete "/user", to: "users#delete"
   #######################################
   get "/stocks/showall", to: "stocks#showall"
+  get "/stocks/search", to: "stocks#search"
   resources :stocks
 end
