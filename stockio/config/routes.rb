@@ -9,5 +9,5 @@ Rails.application.routes.draw do
   #######################################
   get "/stocks/showall", to: "stocks#showall"
   get "/stocks/search", to: "stocks#search"
-  resources :stocks
+  resources :stocks, only: [:index, :create, :show, :destroy]
 end
