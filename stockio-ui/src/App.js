@@ -1,9 +1,10 @@
 import React from 'react';
+import Homepage from './containers/Homepage'
 
 function App() {
   return (
     <div>
-      <h1>Stockio</h1>
+      <Homepage />
     </div>
   );
 }
