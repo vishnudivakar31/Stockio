@@ -2,26 +2,63 @@ import React, { Component } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
+import Snackbar from '@material-ui/core/Snackbar'
+import { connect } from 'react-redux'
+import { setUserToken } from '../actions'
 
 class Homepage extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            snackbar: {
+                enabled: false,
+                message: ""
+            }
+        }
+        this.closeSnackbar = this.closeSnackbar.bind(this)
         this.login = this.login.bind(this)
+        this.setSnackBar = this.setSnackBar.bind(this)
+    }
+    componentDidUpdate(prevProps) {
+        console.log(this.props.user_token)
     }
     login() {
         if(this.username_input && this.password_input) {
             let username = this.username_input.value
             let password = this.password_input.value
             if(username.length === 0 || password.length === 0) {
-                
+                this.setSnackBar("username and password are mandatory for login")
+            } else {
+                this.props.setUserToken(`${username} ${password}`)
             }
         } else {
-            
+            this.setSnackBar("username and password are mandatory for login")
         }
+    }
+    setSnackBar(message) {
+        this.setState({
+            snackbar: {
+                enabled: true,
+                message
+            }
+        })
+    }
+    closeSnackbar() {
+        this.setState({
+            snackbar: {
+                enabled: false,
+                message: ""
+            }
+        })
     }
     render() {
         return (
             <div className="homepage">
+                <Snackbar
+                    open={this.state.snackbar.enabled}
+                    onClose={this.closeSnackbar}
+                    message={this.state.snackbar.message}
+                />
                 <Container maxWidth="sm" className="homepage_console">
                     <div className="hompage_title">Welcome to stockio</div>
                     <TextField 
@@ -103,4 +140,16 @@ class Homepage extends Component {
     }
 }
 
-export default Homepage
+const mapStateToProps = state => {
+    return {
+        user_token: state.user_token
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setUserToken: token => dispatch(setUserToken(token))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Homepage)
