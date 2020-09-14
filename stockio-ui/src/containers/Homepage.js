@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Snackbar from '@material-ui/core/Snackbar'
 import { connect } from 'react-redux'
-import { setUserToken } from '../actions'
+import { login, loginError } from '../actions'
 
 class Homepage extends Component {
     constructor(props) {
@@ -20,7 +20,10 @@ class Homepage extends Component {
         this.setSnackBar = this.setSnackBar.bind(this)
     }
     componentDidUpdate(prevProps) {
-        console.log(this.props.user_token)
+        if(prevProps.login_error !== this.props.login_error && this.props.login_error.length > 0) {
+            this.setSnackBar(this.props.login_error)
+            this.props.loginError("")
+        }
     }
     login() {
         if(this.username_input && this.password_input) {
@@ -29,7 +32,7 @@ class Homepage extends Component {
             if(username.length === 0 || password.length === 0) {
                 this.setSnackBar("username and password are mandatory for login")
             } else {
-                this.props.setUserToken(`${username} ${password}`)
+                this.props.login({username, password})
             }
         } else {
             this.setSnackBar("username and password are mandatory for login")
@@ -142,13 +145,15 @@ class Homepage extends Component {
 
 const mapStateToProps = state => {
     return {
-        user_token: state.user_token
+        user_token: state.user_token,
+        login_error: state.login_error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setUserToken: token => dispatch(setUserToken(token))
+        login: payload => dispatch(login(payload)),
+        loginError: payload => dispatch(loginError(payload))
     }
 }
 
