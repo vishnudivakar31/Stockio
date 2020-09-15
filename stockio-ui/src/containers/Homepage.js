@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Snackbar from '@material-ui/core/Snackbar'
 import { connect } from 'react-redux'
-import { login, loginError } from '../actions'
+import { login, loginError, signUp } from '../actions'
 
 class Homepage extends Component {
     constructor(props) {
@@ -18,6 +18,7 @@ class Homepage extends Component {
         this.closeSnackbar = this.closeSnackbar.bind(this)
         this.login = this.login.bind(this)
         this.setSnackBar = this.setSnackBar.bind(this)
+        this.signup = this.signup.bind(this)
     }
     componentDidUpdate(prevProps) {
         if(prevProps.login_error !== this.props.login_error && this.props.login_error.length > 0) {
@@ -36,6 +37,31 @@ class Homepage extends Component {
             }
         } else {
             this.setSnackBar("username and password are mandatory for login")
+        }
+    }
+    signup() {
+        if(this.signup_username_input && this.signup_email_input && this.signup_password_input &&
+            this.signup_confirm_password_input) {
+            let username = this.signup_username_input.value
+            let email = this.signup_email_input.value
+            let password = this.signup_password_input.value
+            let confirm_password = this.signup_confirm_password_input.value
+            let dob = this.signup_dob_input.value
+            if(username.length === 0 || email.length === 0 || password.length === 0 ||
+                confirm_password.length === 0 || dob.length === 0) {
+                    this.setSnackBar("all fields are mandatory for signing up")
+            } else if (password !== confirm_password) {
+                this.setSnackBar("passwords are not matching, try again.")
+            } else {
+                this.props.signUp({
+                    username,
+                    email,
+                    password,
+                    dob
+                })
+            }
+        } else {
+            this.setSnackBar("all fields are mandatory for signing up")
         }
     }
     setSnackBar(message) {
@@ -88,7 +114,7 @@ class Homepage extends Component {
                     >
                         Log In
                     </Button>
-                    <Button color="secondary" style={{marginLeft: "2%", marginTop: "2%"}}>
+                    <Button color="secondary" disabled style={{marginLeft: "2%", marginTop: "2%"}}>
                         Forgot Password?
                     </Button>
                     <div className="hompage_title" style={{marginTop: "2%"}}>Not a member yet? Well, Sign up.</div>
@@ -134,7 +160,12 @@ class Homepage extends Component {
                         }}
                         inputRef = {input => this.signup_dob_input = input}
                     />
-                    <Button variant="contained" color="primary" style={{marginTop: "2%"}}>
+                    <Button 
+                        variant="contained" 
+                        color="primary" 
+                        style={{marginTop: "2%"}}
+                        onClick={this.signup}
+                    >
                         Sign up
                     </Button>
                 </Container>
@@ -153,7 +184,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         login: payload => dispatch(login(payload)),
-        loginError: payload => dispatch(loginError(payload))
+        loginError: payload => dispatch(loginError(payload)),
+        signUp: payload => dispatch(signUp(payload))
     }
 }
 

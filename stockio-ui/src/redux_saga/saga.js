@@ -9,7 +9,8 @@ import {
     SET_USER_TOKEN,
     LOGIN,
     LOGIN_ERROR,
-    SET_USER
+    SET_USER,
+    SIGNUP
 } from '../constants/action_types'
 
 function* loginToStockio(action) {
@@ -21,11 +22,22 @@ function* loginToStockio(action) {
     } catch (e) {
         yield put({type: LOGIN_ERROR, payload: e.messages})
     }
-    
+}
+
+function* signUpToStockio(action) {
+    try {
+        const response = yield call(Api.signupToStockio, action.payload)
+        yield put({type: SET_USER_TOKEN, payload: response.token})
+        yield put({type: SET_USER, payload: response.user})
+        yield put({type: LOGIN_ERROR, payload: ""})
+    } catch(e) {
+        yield put({type: LOGIN_ERROR, payload: e.messages})
+    }
 }
 
 function* mySaga() {
     yield takeEvery(LOGIN, loginToStockio)
+    yield takeEvery(SIGNUP, signUpToStockio)
 }
 
 export default mySaga

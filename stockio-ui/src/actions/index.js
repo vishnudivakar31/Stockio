@@ -2,7 +2,8 @@ import {
     SET_USER_TOKEN,
     LOGIN,
     LOGIN_ERROR,
-    SET_USER
+    SET_USER,
+    SIGNUP
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -19,4 +20,8 @@ export function loginError(payload) {
 
 export function setUser(payload) {
     return { type: SET_USER, payload }
+}
+
+export function signUp(payload) {
+    return { type: SIGNUP, payload }
 }
