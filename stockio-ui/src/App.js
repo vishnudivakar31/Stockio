@@ -1,11 +1,25 @@
 import React from 'react';
-import Homepage from './containers/Homepage'
+import SecurityPage from './containers/SecurityPage'
+import Dashboard from './containers/Dashboard'
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from 'react-router-dom'
 
 function App() {
   return (
-    <div>
-      <Homepage />
-    </div>
+    <Router>
+      <Route path="/">
+        <Redirect to="/lobby" />
+      </Route>
+      <Route path="/lobby">
+        <SecurityPage />
+      </Route>
+      <Route path="/dashboard">
+        <Dashboard />
+      </Route>
+    </Router>
   );
 }
 

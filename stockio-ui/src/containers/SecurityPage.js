@@ -5,8 +5,9 @@ import Container from '@material-ui/core/Container'
 import Snackbar from '@material-ui/core/Snackbar'
 import { connect } from 'react-redux'
 import { login, loginError, signUp } from '../actions'
+import { withRouter } from 'react-router'
 
-class Homepage extends Component {
+class SecurityPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -24,6 +25,9 @@ class Homepage extends Component {
         if(prevProps.login_error !== this.props.login_error && this.props.login_error.length > 0) {
             this.setSnackBar(this.props.login_error)
             this.props.loginError("")
+        }
+        if(prevProps.user_token !== this.props.user_token && this.props.user_token.length > 0) {
+            this.props.history.push("/dashboard")
         }
     }
     login() {
@@ -189,4 +193,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Homepage)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SecurityPage))
