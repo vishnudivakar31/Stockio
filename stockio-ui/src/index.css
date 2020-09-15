@@ -8,11 +8,6 @@ body {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .homepage {
   display: flex;
   flex: 1;
@@ -36,4 +31,52 @@ code {
 
 .homepage .hompage_title {
   font-weight: 500;
+}
+
+.dashboard {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.dashboard .navigation-bar {
+  width: 15%;
+  background: #2d3436;
+  color: white;
+  padding: 1% 1%
+}
+
+.dashboard .brand {
+  font-size: 45px;
+}
+
+.dashboard .dashboard-titles {
+  font-size: 20px;
+}
+
+.dashboard .nav-tile {
+  padding: 3%;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.dashboard .about {
+  margin-top: 2%;
+  font-size: 20px;
+}
+
+.dashboard .nav-tile:hover {
+  background: #dfe6e9;
+  color: black;
+  font-size: 20px;
+}
+
+.dashboard .nav-tile.active {
+  font-size: 20px;
+}
+
+.dashboard .navigation-bar li {
+  font-size: 15px;
+  text-align: justify;
+  margin-bottom: 2%;
 }
