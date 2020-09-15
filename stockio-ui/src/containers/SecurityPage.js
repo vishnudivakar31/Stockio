@@ -21,6 +21,11 @@ class SecurityPage extends Component {
         this.setSnackBar = this.setSnackBar.bind(this)
         this.signup = this.signup.bind(this)
     }
+    componentDidMount() {
+        if(this.props.user_token && this.props.user_token.length > 0) {
+            this.props.history.push("/dashboard")
+        }
+    }
     componentDidUpdate(prevProps) {
         if(prevProps.login_error !== this.props.login_error && this.props.login_error.length > 0) {
             this.setSnackBar(this.props.login_error)
