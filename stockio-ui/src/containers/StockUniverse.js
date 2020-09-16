@@ -8,7 +8,8 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import { fetchAllStocks } from '../actions'
+import Search from '@material-ui/icons/Search'
+import { fetchAllStocks, searchStock } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
 
@@ -17,22 +18,43 @@ class StockUniverse extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: false
+            loading: false,
         }
+        this.searchStock = this.searchStock.bind(this)
+        this.enterPressed = this.enterPressed.bind(this)
+        this.setLoading = this.setLoading.bind(this)
     }
 
     componentDidMount() {
         this.props.fetchAllStocks(this.props.user_token)
-        this.setState({
-            loading:true
-        })
+        this.setLoading(true)
     }
 
     componentDidUpdate(prevProps) {
         if(prevProps.stocks !== this.props.stocks) {
-            this.setState({
-                loading: false
-            })
+            this.setLoading(false)
+        }
+    }
+
+    setLoading(status) {
+        this.setState({
+            loading: status
+        })
+    }
+
+    enterPressed(event) {
+        if(event.key === 'Enter') {
+            this.searchStock()
+        }
+    }
+
+    searchStock() {
+        if(this.searchBar && this.searchBar.value.length > 0) {
+            this.setLoading(true)
+            this.props.searchStock({ token: this.props.user_token, value: this.searchBar.value})
+        } else {
+            this.setLoading(true)
+            this.props.fetchAllStocks(this.props.user_token)
         }
     }
 
@@ -45,14 +67,25 @@ class StockUniverse extends Component {
                     <div style={{padding: '1%'}}>Please wait, while we fetch the stock options for you</div>
                 </div>
                 <AppBar position='static'>
-                    <Toolbar>
+                    <Toolbar style={{whiteSpace: 'nowrap'}}>
                         <div>
                             Stock Listings
                         </div>
-                        <div style={{marginLeft: '1%'}}>Total: {stocks.length}</div>
-                        <Button color='inherit'>Search</Button>
+                        <div style={{display:'flex', flex: 1, marginLeft: '1%', alignItems: 'center'}}>
+                            <input
+                                className='search-input'
+                                placeholder="search"
+                                ref={input => this.searchBar = input}
+                                onKeyDown={this.enterPressed}
+                            />
+                            <Search 
+                                style={{marginLeft: '1%', cursor: 'pointer'}}
+                                onClick={this.searchStock}
+                            />
+                        </div>
                         <Button color='inherit'>Save</Button>
                         <Button color='secondary'>Discard</Button>
+                        <div style={{marginLeft: '1%'}}>Total: {stocks.length}</div>
                     </Toolbar>
                 </AppBar>
                 <div className="stock-table">
@@ -97,7 +130,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllStocks: payload => dispatch(fetchAllStocks(payload))
+        fetchAllStocks: payload => dispatch(fetchAllStocks(payload)),
+        searchStock: payload => dispatch(searchStock(payload))
     }
 }
 

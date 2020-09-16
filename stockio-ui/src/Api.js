@@ -2,10 +2,16 @@ import {
     LOGIN_URL,
     SIGNUP_URL,
     STOCKS_SHOWALL_URL,
-    NEWS_URL
+    NEWS_URL,
+    SEARCH_URL
 } from './constants/urls'
 
 class Api {
+
+    static goBackToLoginPage() {
+        window.location.replace("/lobby")
+    }
+
     static async loginWithCredentials(payload) {
         let headers = {
             method: 'POST',
@@ -55,6 +61,22 @@ class Api {
         const errorMessage = await response.json()
         throw errorMessage
     }
+    static async searchStocks(action) {
+        let url = `${SEARCH_URL}${action.payload.value}`
+        let headers = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': action.payload.token.trim()
+            }
+        }
+        const response = await fetch(url, headers)
+        if(response.ok) {
+            return response.json()
+        }
+        const errorMessage = await response.json()
+        throw errorMessage
+    }
     static async fetchNews(action) {
         let headers = {
             method: 'GET',
@@ -64,7 +86,11 @@ class Api {
             }
         }
         const response = await fetch(NEWS_URL, headers)
-        return response.json()
+        if(response.ok) {
+            return response.json()
+        } else {
+            throw "unauthorized"
+        }
     }
 }
 

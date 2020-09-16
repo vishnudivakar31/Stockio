@@ -11,7 +11,8 @@ class StockService
         regex = Regexp.new("^#{stock_name}", Regexp::EXTENDED | Regexp::IGNORECASE)
         all_stocks = showall()
         stock_json = JSON.parse(all_stocks.body)["data"]
-        stock_json.select {|stock| regex.match(stock["name"])}
+        stocks = stock_json.select {|stock| regex.match(stock["name"])}
+        {data: stocks}
     end
 
 end
