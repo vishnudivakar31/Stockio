@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
+import StockUniverse from './StockUniverse'
+import { connect } from 'react-redux'
+import { signout } from '../actions'
+import { withRouter } from 'react-router'
 
-class Dashboard extends Component {
+class HomePage extends Component {
     constructor(props) {
         super(props)
         this.navItems = ['Dashboard', 'Watchlist', 'Stock universe', 'Settings', 'Signout']
@@ -8,12 +12,36 @@ class Dashboard extends Component {
             selectedNavLink: 0
         }
         this.navtileClick = this.navtileClick.bind(this)
+        this.renderBoard = this.renderBoard.bind(this)
+    }
+
+    componentDidMount() {
+        if(!this.props.user_token || this.props.user_token.length === 0) {
+            this.props.history.goBack()
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.user_token !== this.props.user_token && this.props.user_token.length === 0) {
+            this.props.history.goBack()
+        }
     }
 
     navtileClick(index) {
         this.setState({
             selectedNavLink: index
         })
+        if(index === 4) {
+            this.props.signout()
+        }
+    }
+
+    renderBoard() {
+        if(this.state.selectedNavLink === 2) {
+            return <StockUniverse />
+        } else {
+            return <div />
+        }
     }
 
     render() {
@@ -42,11 +70,26 @@ class Dashboard extends Component {
                     </div>
                 </div>
                 <div className="navigation-board">
-                    Board
+                    <div className="title">{this.navItems[this.state.selectedNavLink]}</div>
+                    {
+                        this.renderBoard()
+                    }
                 </div>
             </div>
         )
     }
 }
 
-export default Dashboard
+const mapStateToProps = state => {
+    return {
+        user_token: state.userReducer.user_token
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signout: () => dispatch(signout())
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(HomePage))

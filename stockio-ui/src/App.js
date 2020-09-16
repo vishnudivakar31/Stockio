@@ -1,6 +1,6 @@
 import React from 'react';
 import SecurityPage from './containers/SecurityPage'
-import Dashboard from './containers/Dashboard'
+import HomePage from './containers/HomePage'
 import {
   BrowserRouter as Router,
   Route,
@@ -16,8 +16,8 @@ function App() {
       <Route path="/lobby">
         <SecurityPage />
       </Route>
-      <Route path="/dashboard">
-        <Dashboard />
+      <Route path="/stockio">
+        <HomePage />
       </Route>
     </Router>
   );

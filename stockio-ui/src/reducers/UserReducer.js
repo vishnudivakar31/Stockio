@@ -1,7 +1,8 @@
 import {
     SET_USER_TOKEN,
     LOGIN_ERROR,
-    SET_USER
+    SET_USER,
+    SIGNOUT
 } from '../constants/action_types'
 
 const initialState = {
@@ -10,7 +11,7 @@ const initialState = {
     user: {}
 }
 
-function rootReducer(state = initialState, action) {
+function userReducer(state = initialState, action) {
     if(action.type === SET_USER_TOKEN) {
         return Object.assign({}, state, {
             user_token: action.payload
@@ -23,8 +24,13 @@ function rootReducer(state = initialState, action) {
         return Object.assign({}, state, {
             user: action.payload
         })
+    } else if (action.type === SIGNOUT) {
+        return Object.assign({}, state, {
+            user: {},
+            user_token: ""
+        })
     }
     return state
 }
 
-export default rootReducer
+export default userReducer

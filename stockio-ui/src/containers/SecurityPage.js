@@ -23,7 +23,7 @@ class SecurityPage extends Component {
     }
     componentDidMount() {
         if(this.props.user_token && this.props.user_token.length > 0) {
-            this.props.history.push("/dashboard")
+            this.props.history.push("/stockio")
         }
     }
     componentDidUpdate(prevProps) {
@@ -32,7 +32,7 @@ class SecurityPage extends Component {
             this.props.loginError("")
         }
         if(prevProps.user_token !== this.props.user_token && this.props.user_token.length > 0) {
-            this.props.history.push("/dashboard")
+            this.props.history.push("/stockio")
         }
     }
     login() {
@@ -185,8 +185,8 @@ class SecurityPage extends Component {
 
 const mapStateToProps = state => {
     return {
-        user_token: state.user_token,
-        login_error: state.login_error
+        user_token: state.userReducer.user_token,
+        login_error: state.userReducer.login_error
     }
 }
 

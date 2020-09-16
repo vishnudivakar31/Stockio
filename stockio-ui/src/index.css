@@ -61,7 +61,7 @@ body {
 }
 
 .dashboard .about {
-  margin-top: 2%;
+  margin-top: 5%;
   font-size: 20px;
 }
 
@@ -79,4 +79,27 @@ body {
   font-size: 15px;
   text-align: justify;
   margin-bottom: 2%;
+}
+
+.dashboard .navigation-board {
+  width: 85%;
+}
+
+.navigation-board .title {
+  font-size: 45px;
+  padding: 1% 1%;
+}
+
+.stock-universe {
+  height: 100%;
+  overflow: scroll;
+}
+
+.stock-universe .total{
+  position: fixed;
+  right: 1%;
+  top: 3%;
+  font-size: 15px;
+  font-weight: bold;
+  color: #2980b9;
 }

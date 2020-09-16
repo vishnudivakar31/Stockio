@@ -3,7 +3,9 @@ import {
     LOGIN,
     LOGIN_ERROR,
     SET_USER,
-    SIGNUP
+    SIGNUP,
+    SIGNOUT,
+    FETCH_ALL_STOCKS
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -24,4 +26,12 @@ export function setUser(payload) {
 
 export function signUp(payload) {
     return { type: SIGNUP, payload }
+}
+
+export function signout() {
+    return { type: SIGNOUT, payload: " " } 
+}
+
+export function fetchAllStocks(payload) {
+    return {type: FETCH_ALL_STOCKS, payload}
 }
