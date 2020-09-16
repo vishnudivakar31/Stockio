@@ -5,7 +5,9 @@ import {
     SET_USER,
     SIGNUP,
     SIGNOUT,
-    FETCH_ALL_STOCKS
+    FETCH_ALL_STOCKS,
+    FETCH_NEWS,
+    SET_NEWS
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -34,4 +36,12 @@ export function signout() {
 
 export function fetchAllStocks(payload) {
     return {type: FETCH_ALL_STOCKS, payload}
+}
+
+export function fetchNews(payload) {
+    return { type: FETCH_NEWS, payload}
+}
+
+export function setNews(payload) {
+    return { type: SET_NEWS, payload}
 }

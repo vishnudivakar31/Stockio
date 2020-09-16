@@ -51,5 +51,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.stock_api_key = "cda255f889184549af9ae2cc20b4a6d6"
+  config.news_api_key = "85e276831f04493285b3a8db4d5a2da0"
 
 end

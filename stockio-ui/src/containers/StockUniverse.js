@@ -19,32 +19,34 @@ class StockUniverse extends Component {
         return (
             <div className="stock-universe">
                 <div className="total">Total: {stocks.length}</div>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Symbol</TableCell>
-                                <TableCell>Currency</TableCell>
-                                <TableCell>Exchange</TableCell>
-                                <TableCell>Country</TableCell>
-                                <TableCell>Type</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {stocks.map((row, index) => (
-                                <TableRow key={`${index}`}>
-                                    <TableCell>{row.name}</TableCell>
-                                    <TableCell>{row.symbol}</TableCell>
-                                    <TableCell>{row.currency}</TableCell>
-                                    <TableCell>{row.exchange}</TableCell>
-                                    <TableCell>{row.country}</TableCell>
-                                    <TableCell>{row.type}</TableCell>
+                <div className="stock-table">
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Symbol</TableCell>
+                                    <TableCell>Currency</TableCell>
+                                    <TableCell>Exchange</TableCell>
+                                    <TableCell>Country</TableCell>
+                                    <TableCell>Type</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+                            <TableBody>
+                                {stocks.map((row, index) => (
+                                    <TableRow key={`${index}`}>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.symbol}</TableCell>
+                                        <TableCell>{row.currency}</TableCell>
+                                        <TableCell>{row.exchange}</TableCell>
+                                        <TableCell>{row.country}</TableCell>
+                                        <TableCell>{row.type}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
             </div>
         )
     }

@@ -1,7 +1,8 @@
 import {
     LOGIN_URL,
     SIGNUP_URL,
-    STOCKS_SHOWALL_URL
+    STOCKS_SHOWALL_URL,
+    NEWS_URL
 } from './constants/urls'
 
 class Api {
@@ -53,6 +54,17 @@ class Api {
         }
         const errorMessage = await response.json()
         throw errorMessage
+    }
+    static async fetchNews(action) {
+        let headers = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': action.payload.trim()
+            }
+        }
+        const response = await fetch(NEWS_URL, headers)
+        return response.json()
     }
 }
 

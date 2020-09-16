@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import StockUniverse from './StockUniverse'
 import { connect } from 'react-redux'
-import { signout } from '../actions'
+import { signout, fetchNews } from '../actions'
 import { withRouter } from 'react-router'
 
 class HomePage extends Component {
@@ -13,12 +13,14 @@ class HomePage extends Component {
         }
         this.navtileClick = this.navtileClick.bind(this)
         this.renderBoard = this.renderBoard.bind(this)
+        this.renderNews = this.renderNews.bind(this)
     }
 
     componentDidMount() {
         if(!this.props.user_token || this.props.user_token.length === 0) {
             this.props.history.goBack()
         }
+        this.props.fetchNews(this.props.user_token)
     }
 
     componentDidUpdate(prevProps) {
@@ -44,6 +46,20 @@ class HomePage extends Component {
         }
     }
 
+    renderNews() {
+        const news = this.props.news &&  this.props.news.articles ? this.props.news.articles : []
+        return (
+            <div className="new-container">
+                {news.map((item, index) => (
+                    <div className="news-tile" key={index} onClick={() => window.open(item.url, "_blank")}>
+                        <img className="news-photo" src={item.urlToImage} />
+                        <div className="news-title">{item.title}</div>
+                    </div>
+                ))}
+            </div>
+        )
+    }
+
     render() {
         return (
             <div className='dashboard'>
@@ -54,19 +70,9 @@ class HomePage extends Component {
                         return <div className={className} key={index} onClick={() => this.navtileClick(index)}>{item}</div>
                     })}
                     <div>
-                        <div className='about'>About</div>
-                        <ul>
-                            <li>Stockio helps you to stay in touch with the financial market especially
-                            equity invovled in US NASDAQ. You can view all stocks in NASDAQ, search 
-                            them and add them to your watchlist.
-                            </li>
-                            <li>
-                                With watchlist, you will be receiving real-time pricing of your equities.
-                            </li>
-                            <li>
-                                Dashboard will be showing various insights for your equities.
-                            </li>
-                        </ul>
+                        <div className='about'>Top Business News</div>
+                        <div className='lastUpdated'>last updated at {this.props.updated_time}</div>
+                        {this.renderNews()}
                     </div>
                 </div>
                 <div className="navigation-board">
@@ -82,13 +88,16 @@ class HomePage extends Component {
 
 const mapStateToProps = state => {
     return {
-        user_token: state.userReducer.user_token
+        user_token: state.userReducer.user_token,
+        updated_time: state.newsReducer.lastUpdated,
+        news: state.newsReducer.news
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        signout: () => dispatch(signout())
+        signout: () => dispatch(signout()),
+        fetchNews: (payload) => dispatch(fetchNews(payload))
     }
 }
 

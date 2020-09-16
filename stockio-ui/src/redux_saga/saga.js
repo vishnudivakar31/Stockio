@@ -12,7 +12,9 @@ import {
     SET_USER,
     SIGNUP,
     FETCH_ALL_STOCKS,
-    SET_ALL_STOCKS
+    SET_ALL_STOCKS,
+    FETCH_NEWS,
+    SET_NEWS
 } from '../constants/action_types'
 
 function* loginToStockio(action) {
@@ -46,10 +48,16 @@ function* fetchAllStocks(token) {
     }
 }
 
+function* fetchNews(payload) {
+    const news = yield call(Api.fetchNews, payload)
+    yield put({ type: SET_NEWS, payload: news})
+}
+
 function* mySaga() {
     yield takeEvery(LOGIN, loginToStockio)
     yield takeEvery(SIGNUP, signUpToStockio)
     yield takeEvery(FETCH_ALL_STOCKS, fetchAllStocks)
+    yield takeEvery(FETCH_NEWS, fetchNews)
 }
 
 export default mySaga
