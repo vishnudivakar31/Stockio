@@ -20,7 +20,14 @@ class HomePage extends Component {
         if(!this.props.user_token || this.props.user_token.length === 0) {
             this.props.history.goBack()
         }
+        this.newInterval = setInterval(() => {this.props.fetchNews(this.props.user_token)}, 3600000)
         this.props.fetchNews(this.props.user_token)
+    }
+
+    componentWillUnmount() {
+        if(this.newInterval) {
+            clearInterval(this.newInterval)
+        }
     }
 
     componentDidUpdate(prevProps) {
