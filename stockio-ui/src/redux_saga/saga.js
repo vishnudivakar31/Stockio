@@ -15,7 +15,9 @@ import {
     SET_ALL_STOCKS,
     FETCH_NEWS,
     SET_NEWS,
-    SEATCH_STOCK
+    SEATCH_STOCK,
+    SAVE_MY_STOCKS,
+    FETCH_MY_STOCKS
 } from '../constants/action_types'
 
 function* loginToStockio(action) {
@@ -42,20 +44,42 @@ function* signUpToStockio(action) {
 
 function* fetchAllStocks(token) {
     try {
+        const my_stocks = yield call(Api.getMyStocks, token)
         const stocks = yield call(Api.fetchAllStocks, token)
+        if(stocks.data) {
+            stocks.data = stocks.data.filter(stock => !my_stocks.includes(stock))
+        }
         yield put({type: SET_ALL_STOCKS, payload: stocks})
+        yield put({type: SAVE_MY_STOCKS, payload: my_stocks})
     } catch(e) {
-        console.log(e)
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
+    }
+}
+
+function* fetchMyStocks(token) {
+    try {
+        const my_stocks = yield call(Api.getMyStocks, token)
+        yield put({type: SAVE_MY_STOCKS, payload: my_stocks})
+    } catch(e) {
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
     }
 }
 
 function* searchStocks(payload) {
-    console.log('search')
     try {
         const stocks = yield call(Api.searchStocks, payload)
         yield put({type: SET_ALL_STOCKS, payload: stocks})
     } catch(e) {
-        console.log(e)
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
     }
 }
 
@@ -77,6 +101,7 @@ function* mySaga() {
     yield takeEvery(FETCH_ALL_STOCKS, fetchAllStocks)
     yield takeEvery(FETCH_NEWS, fetchNews)
     yield takeEvery(SEATCH_STOCK, searchStocks)
+    yield takeEvery(FETCH_MY_STOCKS, fetchMyStocks)
 }
 
 export default mySaga

@@ -8,7 +8,9 @@ import {
     FETCH_ALL_STOCKS,
     FETCH_NEWS,
     SET_NEWS,
-    SEATCH_STOCK
+    SEATCH_STOCK,
+    FETCH_MY_STOCKS,
+    SAVE_MY_STOCKS
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -50,3 +52,12 @@ export function setNews(payload) {
 export function searchStock(payload) {
     return { type: SEATCH_STOCK, payload}
 }
+
+export function fetchMyStocks(payload) {
+    return { type: FETCH_MY_STOCKS, payload }
+}
+
+export function savemyStocks(payload) {
+    return { type: SAVE_MY_STOCKS, payload }
+}
+

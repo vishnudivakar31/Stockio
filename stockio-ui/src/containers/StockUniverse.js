@@ -9,6 +9,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Search from '@material-ui/icons/Search'
+import Checkbox from '@material-ui/core/Checkbox'
 import { fetchAllStocks, searchStock } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
@@ -19,10 +20,13 @@ class StockUniverse extends Component {
         super(props)
         this.state = {
             loading: false,
+            editingMode: false,
+            selectedStocks: []
         }
         this.searchStock = this.searchStock.bind(this)
         this.enterPressed = this.enterPressed.bind(this)
         this.setLoading = this.setLoading.bind(this)
+        this.checkStock = this.checkStock.bind(this)
     }
 
     componentDidMount() {
@@ -58,8 +62,30 @@ class StockUniverse extends Component {
         }
     }
 
+    checkStock(stock) {
+        let newStock = Object.assign({}, stock)
+        newStock['stock_type'] = newStock.type
+        delete newStock.type
+        let selectedStocks = this.state.selectedStocks
+        if(selectedStocks.filter(stocks => stock.symbol === stocks.symbol).length > 0) {
+            selectedStocks = selectedStocks.filter(stocks => stock.symbol !== stocks.symbol)
+            this.setState({
+                selectedStocks,
+                editingMode: selectedStocks.length > 0
+            })
+        } else {
+            selectedStocks.push(newStock)
+            this.setState({
+                selectedStocks,
+                editingMode: selectedStocks.length > 0
+            })
+        }
+    }
+
     render() {
         const stocks = this.props.stocks.data ? this.props.stocks.data : []
+        const selectedStocks = this.state.selectedStocks
+        console.log('selected stocks', selectedStocks)
         return (
             <div className="stock-universe">
                 <div style={{display: this.state.loading ? 'block' : 'none'}}>
@@ -83,8 +109,8 @@ class StockUniverse extends Component {
                                 onClick={this.searchStock}
                             />
                         </div>
-                        <Button color='inherit'>Save</Button>
-                        <Button color='secondary'>Discard</Button>
+                        <Button color='inherit' disabled={!this.state.editingMode}>Save</Button>
+                        <Button color='secondary' disabled={!this.state.editingMode}>Discard</Button>
                         <div style={{marginLeft: '1%'}}>Total: {stocks.length}</div>
                     </Toolbar>
                 </AppBar>
@@ -99,6 +125,7 @@ class StockUniverse extends Component {
                                     <TableCell>Exchange</TableCell>
                                     <TableCell>Country</TableCell>
                                     <TableCell>Type</TableCell>
+                                    <TableCell>Watching?</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -110,6 +137,12 @@ class StockUniverse extends Component {
                                         <TableCell>{row.exchange}</TableCell>
                                         <TableCell>{row.country}</TableCell>
                                         <TableCell>{row.type}</TableCell>
+                                        <TableCell>
+                                            <Checkbox
+                                                color='primary'
+                                                onClick={() => this.checkStock(row)}
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -124,7 +157,8 @@ class StockUniverse extends Component {
 const mapStateToProps = state => {
     return {
         user_token: state.userReducer.user_token,
-        stocks: state.stockReducer.stocks
+        stocks: state.stockReducer.stocks,
+        myStocks: state.stockReducer.myStocks
     }
 }
 

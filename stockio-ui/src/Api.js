@@ -3,7 +3,8 @@ import {
     SIGNUP_URL,
     STOCKS_SHOWALL_URL,
     NEWS_URL,
-    SEARCH_URL
+    SEARCH_URL,
+    BASE_STOCK_URL
 } from './constants/urls'
 
 class Api {
@@ -71,6 +72,21 @@ class Api {
             }
         }
         const response = await fetch(url, headers)
+        if(response.ok) {
+            return response.json()
+        }
+        const errorMessage = await response.json()
+        throw errorMessage
+    }
+    static async getMyStocks(action) {
+        let headers = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': action.payload.trim()
+            }
+        }
+        const response = await fetch(BASE_STOCK_URL, headers)
         if(response.ok) {
             return response.json()
         }

@@ -9,7 +9,7 @@ class HomePage extends Component {
         super(props)
         this.navItems = ['Dashboard', 'Watchlist', 'Stock universe', 'Settings', 'Signout']
         this.state = {
-            selectedNavLink: 0
+            selectedNavLink: 2
         }
         this.navtileClick = this.navtileClick.bind(this)
         this.renderBoard = this.renderBoard.bind(this)
