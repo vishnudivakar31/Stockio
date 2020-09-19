@@ -92,6 +92,7 @@ body {
 
 .dashboard .navigation-board {
   width: 85%;
+  height: max-content;
 }
 
 .navigation-board .title {

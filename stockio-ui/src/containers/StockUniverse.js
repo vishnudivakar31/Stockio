@@ -10,6 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import Search from '@material-ui/icons/Search'
 import Checkbox from '@material-ui/core/Checkbox'
+import Pagination from '@material-ui/lab/Pagination'
 import { fetchAllStocks, searchStock } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
@@ -21,12 +22,14 @@ class StockUniverse extends Component {
         this.state = {
             loading: false,
             editingMode: false,
-            selectedStocks: []
+            selectedStocks: [],
+            currentPage: 0
         }
         this.searchStock = this.searchStock.bind(this)
         this.enterPressed = this.enterPressed.bind(this)
         this.setLoading = this.setLoading.bind(this)
         this.checkStock = this.checkStock.bind(this)
+        this.paginationChange = this.paginationChange.bind(this)
     }
 
     componentDidMount() {
@@ -82,10 +85,15 @@ class StockUniverse extends Component {
         }
     }
 
+    paginationChange(event, page) {
+        this.setState({
+            currentPage: ((page - 1) * 9)
+        })
+    }
+
     render() {
-        const stocks = this.props.stocks.data ? this.props.stocks.data : []
-        const selectedStocks = this.state.selectedStocks
-        console.log('selected stocks', selectedStocks)
+        let length = this.props.stocks.data ? this.props.stocks.data.length : 0
+        let stocks = this.props.stocks.data ? this.props.stocks.data.slice(this.state.currentPage, this.state.currentPage + 10) : []
         return (
             <div className="stock-universe">
                 <div style={{display: this.state.loading ? 'block' : 'none'}}>
@@ -111,7 +119,7 @@ class StockUniverse extends Component {
                         </div>
                         <Button color='inherit' disabled={!this.state.editingMode}>Save</Button>
                         <Button color='secondary' disabled={!this.state.editingMode}>Discard</Button>
-                        <div style={{marginLeft: '1%'}}>Total: {stocks.length}</div>
+                        <div style={{marginLeft: '1%'}}>Total: {length}</div>
                     </Toolbar>
                 </AppBar>
                 <div className="stock-table">
@@ -139,7 +147,9 @@ class StockUniverse extends Component {
                                         <TableCell>{row.type}</TableCell>
                                         <TableCell>
                                             <Checkbox
+                                                key={row.symbol}
                                                 color='primary'
+                                                checked={this.state.selectedStocks.find(stock => stock.symbol === row.symbol)}
                                                 onClick={() => this.checkStock(row)}
                                             />
                                         </TableCell>
@@ -148,6 +158,15 @@ class StockUniverse extends Component {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Pagination 
+                        count = {Math.ceil(length / 9)}
+                        onChange = {this.paginationChange}
+                        variant = 'outlined'
+                        color = 'primary'
+                        showFirstButton
+                        showLastButton
+                        style={{marginTop: '0.5%', display: 'flex', justifyContent: 'center'}}
+                    />
                 </div>
             </div>
         )
