@@ -108,6 +108,24 @@ class Api {
             throw "unauthorized"
         }
     }
+    static async saveMyStocks(action) {
+        let headers = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': action.payload.user_token.trim()
+            },
+            body: JSON.stringify(action.payload.stocks)
+        }
+        const response = await fetch(BASE_STOCK_URL, headers)
+        if(response.ok) {
+            let token = response.headers.get('Authorization')
+            let user = await response.json()
+            return {user, token}
+        }
+        const errorMessage = await response.json()
+        throw errorMessage
+    }
 }
 
 export default Api

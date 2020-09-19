@@ -3,6 +3,7 @@ import {
     put,
     takeEvery
 } from 'redux-saga/effects'
+
 import Api from '../Api'
 
 import {
@@ -83,6 +84,18 @@ function* searchStocks(payload) {
     }
 }
 
+function* savemyStocks(payload) {
+    try {
+        const stocks = yield call(Api.saveMyStocks, payload)
+        yield put({type: SAVE_MY_STOCKS, payload: stocks})
+    } catch(e) {
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
+    }
+}
+
 function* fetchNews(payload) {
     try {
         const news = yield call(Api.fetchNews, payload)
@@ -102,6 +115,7 @@ function* mySaga() {
     yield takeEvery(FETCH_NEWS, fetchNews)
     yield takeEvery(SEATCH_STOCK, searchStocks)
     yield takeEvery(FETCH_MY_STOCKS, fetchMyStocks)
+    yield takeEvery(SAVE_MY_STOCKS, savemyStocks)
 }
 
 export default mySaga

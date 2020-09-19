@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Search from '@material-ui/icons/Search'
 import Checkbox from '@material-ui/core/Checkbox'
 import Pagination from '@material-ui/lab/Pagination'
-import { fetchAllStocks, searchStock } from '../actions'
+import { fetchAllStocks, searchStock, savemyStocks } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
 
@@ -30,6 +30,8 @@ class StockUniverse extends Component {
         this.setLoading = this.setLoading.bind(this)
         this.checkStock = this.checkStock.bind(this)
         this.paginationChange = this.paginationChange.bind(this)
+        this.discard = this.discard.bind(this)
+        this.save = this.save.bind(this)
     }
 
     componentDidMount() {
@@ -85,6 +87,21 @@ class StockUniverse extends Component {
         }
     }
 
+    discard() {
+        this.setState({
+            selectedStocks: [],
+            editingMode: false
+        })
+    }
+
+    save() {
+        let payload = {
+            stocks: this.state.selectedStocks,
+            user_token: this.props.user_token
+        }
+        this.props.savemyStocks(payload)
+    }
+
     paginationChange(event, page) {
         this.setState({
             currentPage: ((page - 1) * 9)
@@ -117,8 +134,8 @@ class StockUniverse extends Component {
                                 onClick={this.searchStock}
                             />
                         </div>
-                        <Button color='inherit' disabled={!this.state.editingMode}>Save</Button>
-                        <Button color='secondary' disabled={!this.state.editingMode}>Discard</Button>
+                        <Button color='inherit' disabled={!this.state.editingMode} onClick={this.save}>Save</Button>
+                        <Button color='secondary' disabled={!this.state.editingMode} onClick={this.discard}>Discard</Button>
                         <div style={{marginLeft: '1%'}}>Total: {length}</div>
                     </Toolbar>
                 </AppBar>
@@ -149,7 +166,7 @@ class StockUniverse extends Component {
                                             <Checkbox
                                                 key={row.symbol}
                                                 color='primary'
-                                                checked={this.state.selectedStocks.find(stock => stock.symbol === row.symbol)}
+                                                checked={this.state.selectedStocks.find(stock => stock.symbol === row.symbol) !== undefined}
                                                 onClick={() => this.checkStock(row)}
                                             />
                                         </TableCell>
@@ -184,7 +201,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchAllStocks: payload => dispatch(fetchAllStocks(payload)),
-        searchStock: payload => dispatch(searchStock(payload))
+        searchStock: payload => dispatch(searchStock(payload)),
+        savemyStocks: payload => dispatch(savemyStocks(payload))
     }
 }
 
