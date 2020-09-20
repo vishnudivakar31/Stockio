@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Search from '@material-ui/icons/Search'
 import Checkbox from '@material-ui/core/Checkbox'
 import Pagination from '@material-ui/lab/Pagination'
-import { fetchAllStocks, searchStock, savemyStocks } from '../actions'
+import { fetchAllStocks, searchStock, savemyStocks, fetchMyStocks } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
 
@@ -23,7 +23,8 @@ class StockUniverse extends Component {
             loading: false,
             editingMode: false,
             selectedStocks: [],
-            currentPage: 0
+            currentPage: 0,
+            loadingMsg: ""
         }
         this.searchStock = this.searchStock.bind(this)
         this.enterPressed = this.enterPressed.bind(this)
@@ -35,19 +36,24 @@ class StockUniverse extends Component {
     }
 
     componentDidMount() {
+        this.props.fetchMyStocks(this.props.user_token)
         this.props.fetchAllStocks(this.props.user_token)
-        this.setLoading(true)
+        this.setLoading(true, "Please wait, while we are fetching the stocks")
     }
 
     componentDidUpdate(prevProps) {
         if(prevProps.stocks !== this.props.stocks) {
             this.setLoading(false)
         }
+        if(prevProps.myStocks !== this.props.myStocks) {
+            this.props.fetchAllStocks(this.props.user_token)
+        }
     }
 
-    setLoading(status) {
+    setLoading(status, msg = "") {
         this.setState({
-            loading: status
+            loading: status,
+            loadingMsg: msg
         })
     }
 
@@ -59,7 +65,7 @@ class StockUniverse extends Component {
 
     searchStock() {
         if(this.searchBar && this.searchBar.value.length > 0) {
-            this.setLoading(true)
+            this.setLoading(true, "Please wait, while we are searching for the stocks")
             this.props.searchStock({ token: this.props.user_token, value: this.searchBar.value})
         } else {
             this.setLoading(true)
@@ -100,6 +106,7 @@ class StockUniverse extends Component {
             user_token: this.props.user_token
         }
         this.props.savemyStocks(payload)
+        this.setLoading(true, "Please wait, while we are saving the stocks")
     }
 
     paginationChange(event, page) {
@@ -115,7 +122,7 @@ class StockUniverse extends Component {
             <div className="stock-universe">
                 <div style={{display: this.state.loading ? 'block' : 'none'}}>
                     <LinearProgress />
-                    <div style={{padding: '1%'}}>Please wait, while we fetch the stock options for you</div>
+                    <div style={{padding: '1%'}}>{this.state.loadingMsg}</div>
                 </div>
                 <AppBar position='static'>
                     <Toolbar style={{whiteSpace: 'nowrap'}}>
@@ -202,7 +209,8 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchAllStocks: payload => dispatch(fetchAllStocks(payload)),
         searchStock: payload => dispatch(searchStock(payload)),
-        savemyStocks: payload => dispatch(savemyStocks(payload))
+        savemyStocks: payload => dispatch(savemyStocks(payload)),
+        fetchMyStocks: payload => dispatch(fetchMyStocks(payload))
     }
 }
 

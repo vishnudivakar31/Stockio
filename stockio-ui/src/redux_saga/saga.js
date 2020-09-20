@@ -48,10 +48,9 @@ function* fetchAllStocks(token) {
         const my_stocks = yield call(Api.getMyStocks, token)
         const stocks = yield call(Api.fetchAllStocks, token)
         if(stocks.data) {
-            stocks.data = stocks.data.filter(stock => !my_stocks.includes(stock))
+            stocks.data = stocks.data.filter(stock => !my_stocks.map(item => item['symbol']).includes(stock.symbol))
         }
         yield put({type: SET_ALL_STOCKS, payload: stocks})
-        yield put({type: SAVE_MY_STOCKS, payload: my_stocks})
     } catch(e) {
         if(e === 'unauthorized') {
             yield put({type: SET_USER_TOKEN, payload: ""})

@@ -37,10 +37,20 @@ class StocksController < ApplicationController
         render json: stock
     end
 
+    def bulk
+        stocks = JSON.parse(request.raw_post)
+        stocks.each do |stock| 
+            new_stock = Stock.create(stock)
+            @user.stocks << new_stock unless @user.stocks.any? {|item| item["symbol"] == new_stock["symbol"]}
+        end
+        render json: @user.stocks
+    end
+
     private
 
     def params_stock
         params.require(:stock).permit(:symbol, :name, :currency, :exchange, :country, :stock_type)
     end
+
 
 end

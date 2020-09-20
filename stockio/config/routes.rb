@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   get "/stocks/search", to: "stocks#search"
   resources :stocks, only: [:index, :create, :show, :destroy]
   get "/topnews", to: "news#topnews"
+  post "/stocks/bulk", to: "stocks#bulk"
 end

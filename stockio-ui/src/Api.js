@@ -4,7 +4,8 @@ import {
     STOCKS_SHOWALL_URL,
     NEWS_URL,
     SEARCH_URL,
-    BASE_STOCK_URL
+    BASE_STOCK_URL,
+    BULK_STOCK
 } from './constants/urls'
 
 class Api {
@@ -117,12 +118,8 @@ class Api {
             },
             body: JSON.stringify(action.payload.stocks)
         }
-        const response = await fetch(BASE_STOCK_URL, headers)
-        if(response.ok) {
-            let token = response.headers.get('Authorization')
-            let user = await response.json()
-            return {user, token}
-        }
+        const response = await fetch(BULK_STOCK, headers)
+        return response.json()
         const errorMessage = await response.json()
         throw errorMessage
     }
