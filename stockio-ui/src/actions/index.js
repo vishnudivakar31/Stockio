@@ -10,7 +10,8 @@ import {
     SET_NEWS,
     SEATCH_STOCK,
     FETCH_MY_STOCKS,
-    SAVE_MY_STOCKS
+    SAVE_MY_STOCKS,
+    SEARCH_MY_STOCKS
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -59,5 +60,9 @@ export function fetchMyStocks(payload) {
 
 export function savemyStocks(payload) {
     return { type: SAVE_MY_STOCKS, payload }
+}
+
+export function searchmyStocks(payload) {
+    return { type: SEARCH_MY_STOCKS, payload}
 }
 

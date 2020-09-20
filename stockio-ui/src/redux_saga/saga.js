@@ -18,8 +18,10 @@ import {
     SET_NEWS,
     SEATCH_STOCK,
     SAVE_MY_STOCKS,
-    FETCH_MY_STOCKS
+    FETCH_MY_STOCKS,
+    SEARCH_MY_STOCKS
 } from '../constants/action_types'
+
 
 function* loginToStockio(action) {
     try {
@@ -95,6 +97,20 @@ function* savemyStocks(payload) {
     }
 }
 
+function* searchMyStocks(action) {
+    try {
+        let searchText = action.payload.searchText.toLowerCase()
+        let my_stocks = yield call(Api.getMyStocks, { payload: action.payload.user_token})
+        my_stocks = my_stocks.filter(stock => stock.name.toLowerCase().startsWith(searchText))
+        yield put({type: SAVE_MY_STOCKS, payload: my_stocks})
+    } catch(e) {
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
+    }
+}
+
 function* fetchNews(payload) {
     try {
         const news = yield call(Api.fetchNews, payload)
@@ -115,6 +131,7 @@ function* mySaga() {
     yield takeEvery(SEATCH_STOCK, searchStocks)
     yield takeEvery(FETCH_MY_STOCKS, fetchMyStocks)
     yield takeEvery(SAVE_MY_STOCKS, savemyStocks)
+    yield takeEvery(SEARCH_MY_STOCKS, searchMyStocks)
 }
 
 export default mySaga

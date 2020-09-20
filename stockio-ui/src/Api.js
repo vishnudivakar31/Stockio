@@ -119,7 +119,9 @@ class Api {
             body: JSON.stringify(action.payload.stocks)
         }
         const response = await fetch(BULK_STOCK, headers)
-        return response.json()
+        if(response.ok) {
+            return response.json()
+        }
         const errorMessage = await response.json()
         throw errorMessage
     }
