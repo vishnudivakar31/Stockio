@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   resources :stocks, only: [:index, :create, :show, :destroy]
   get "/topnews", to: "news#topnews"
   post "/stocks/bulk", to: "stocks#bulk"
+  delete "/mystocks/bulk", to: "stocks#bulk_delete"
 end

@@ -11,7 +11,8 @@ import {
     SEATCH_STOCK,
     FETCH_MY_STOCKS,
     SAVE_MY_STOCKS,
-    SEARCH_MY_STOCKS
+    SEARCH_MY_STOCKS,
+    DELETE_MY_STOCKS
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -64,5 +65,9 @@ export function savemyStocks(payload) {
 
 export function searchmyStocks(payload) {
     return { type: SEARCH_MY_STOCKS, payload}
+}
+
+export function deleteMyStocks(payload) {
+    return { type: DELETE_MY_STOCKS, payload}
 }
 

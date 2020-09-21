@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { fetchMyStocks, searchmyStocks } from '../actions'
+import { fetchMyStocks, searchmyStocks, deleteMyStocks } from '../actions'
 import { connect } from 'react-redux'
 import { TableHead, TableRow } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox'
@@ -101,7 +101,11 @@ class Watchlist extends Component {
     }
 
     save() {
-        // TODO
+        this.setLoading("true", "Please wait, while we are deleting your stock listings")
+        this.props.deleteMyStocks({
+            stocks: this.state.selectedStocks,
+            user_token: this.props.user_token
+        })
     }
 
     paginationChange(event, page) {
@@ -202,7 +206,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchMyStocks: payload => dispatch(fetchMyStocks(payload)),
-        searchmyStocks: payload => dispatch(searchmyStocks(payload))
+        searchmyStocks: payload => dispatch(searchmyStocks(payload)),
+        deleteMyStocks: payload => dispatch(deleteMyStocks(payload))
     }
 }
 

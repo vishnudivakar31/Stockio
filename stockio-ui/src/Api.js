@@ -5,7 +5,8 @@ import {
     NEWS_URL,
     SEARCH_URL,
     BASE_STOCK_URL,
-    BULK_STOCK
+    BULK_STOCK,
+    BULK_DELETE
 } from './constants/urls'
 
 class Api {
@@ -119,6 +120,22 @@ class Api {
             body: JSON.stringify(action.payload.stocks)
         }
         const response = await fetch(BULK_STOCK, headers)
+        if(response.ok) {
+            return response.json()
+        }
+        const errorMessage = await response.json()
+        throw errorMessage
+    }
+    static async deleteMyStocks(action) {
+        let headers = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': action.payload.user_token.trim()
+            },
+            body: JSON.stringify(action.payload.stocks)
+        }
+        const response = await fetch(BULK_DELETE, headers)
         if(response.ok) {
             return response.json()
         }

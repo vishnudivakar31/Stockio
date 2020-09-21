@@ -19,7 +19,8 @@ import {
     SEATCH_STOCK,
     SAVE_MY_STOCKS,
     FETCH_MY_STOCKS,
-    SEARCH_MY_STOCKS
+    SEARCH_MY_STOCKS,
+    DELETE_MY_STOCKS
 } from '../constants/action_types'
 
 
@@ -97,6 +98,18 @@ function* savemyStocks(payload) {
     }
 }
 
+function* deleteMyStocks(action) {
+    try {
+        const stocks = yield call(Api.deleteMyStocks, action)
+        yield put({type: SAVE_MY_STOCKS, payload: stocks})
+    } catch(e) {
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
+    }
+}
+
 function* searchMyStocks(action) {
     try {
         let searchText = action.payload.searchText.toLowerCase()
@@ -132,6 +145,7 @@ function* mySaga() {
     yield takeEvery(FETCH_MY_STOCKS, fetchMyStocks)
     yield takeEvery(SAVE_MY_STOCKS, savemyStocks)
     yield takeEvery(SEARCH_MY_STOCKS, searchMyStocks)
+    yield takeEvery(DELETE_MY_STOCKS, deleteMyStocks)
 }
 
 export default mySaga

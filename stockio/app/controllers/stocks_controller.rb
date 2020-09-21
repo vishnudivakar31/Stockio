@@ -46,6 +46,14 @@ class StocksController < ApplicationController
         render json: @user.stocks
     end
 
+    def bulk_delete
+        stocks = JSON.parse(request.raw_post)
+        stocks.each do |stock|
+            @user.stocks.find(stock["id"]).destroy
+        end
+        render json: @user.stocks
+    end
+
     private
 
     def params_stock
