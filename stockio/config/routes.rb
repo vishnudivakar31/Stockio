@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   get "/topnews", to: "news#topnews"
   post "/stocks/bulk", to: "stocks#bulk"
   delete "/mystocks/bulk", to: "stocks#bulk_delete"
+  get "/mystocks/current_rate", to: "stocks#current_rate"
 end

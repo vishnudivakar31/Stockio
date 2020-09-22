@@ -54,6 +54,11 @@ class StocksController < ApplicationController
         render json: @user.stocks
     end
 
+    def current_rate
+        stocks = @stockService.fetchCurrentRate(@user.stocks)
+        render json: stocks
+    end
+
     private
 
     def params_stock
