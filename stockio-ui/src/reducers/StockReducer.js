@@ -1,11 +1,13 @@
 import {
     SET_ALL_STOCKS,
-    SAVE_MY_STOCKS
+    SAVE_MY_STOCKS,
+    SET_CURRENT_RATE
 } from '../constants/action_types'
 
 const initialState = {
     stocks: [],
-    myStocks: []
+    myStocks: [],
+    currentRate: []
 }
 
 function stockReducer(state = initialState, action) {
@@ -16,6 +18,10 @@ function stockReducer(state = initialState, action) {
     } else if(action.type === SAVE_MY_STOCKS) {
         return Object.assign({}, state, {
             myStocks: action.payload
+        })
+    } else if (action.type === SET_CURRENT_RATE) {
+        return Object.assign({}, state, {
+            currentRate: action.payload
         })
     }
     return state

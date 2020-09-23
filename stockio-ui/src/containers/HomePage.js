@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import StockUniverse from './StockUniverse'
 import Watchlist from './Watchlist'
+import DashBoard from './DashBoard'
 import { connect } from 'react-redux'
 import { signout, fetchNews } from '../actions'
 import { withRouter } from 'react-router'
@@ -47,7 +48,9 @@ class HomePage extends Component {
     }
 
     renderBoard() {
-        if(this.state.selectedNavLink === 1) {
+        if (this.state.selectedNavLink === 0){
+            return <DashBoard />
+        } else if(this.state.selectedNavLink === 1) {
             return <Watchlist />
         } else if(this.state.selectedNavLink === 2) {
             return <StockUniverse />

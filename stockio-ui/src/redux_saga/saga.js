@@ -1,7 +1,8 @@
 import {
     call,
     put,
-    takeEvery
+    takeEvery,
+    select
 } from 'redux-saga/effects'
 
 import Api from '../Api'
@@ -20,9 +21,12 @@ import {
     SAVE_MY_STOCKS,
     FETCH_MY_STOCKS,
     SEARCH_MY_STOCKS,
-    DELETE_MY_STOCKS
+    DELETE_MY_STOCKS,
+    FETCH_CURRENT_RATE,
+    SET_CURRENT_RATE
 } from '../constants/action_types'
 
+const getMyStocks = state => state.stockReducer.myStocks
 
 function* loginToStockio(action) {
     try {
@@ -124,6 +128,24 @@ function* searchMyStocks(action) {
     }
 }
 
+function* getCurrentRate(payload) {
+    try {
+        let currentRate = yield call(Api.getCurrentRate, payload)
+        const myStocks = yield select(getMyStocks)
+        currentRate.map(rate => {
+            let stock = myStocks.find(item => item.symbol === rate.symbol)
+            rate.name = stock.name
+            return rate
+        })
+        yield put({type: SET_CURRENT_RATE, payload: currentRate})
+    } catch(e) {
+        if(e === 'unauthorized') {
+            yield put({type: SET_USER_TOKEN, payload: ""})
+            yield put({type: SET_USER, payload: {}})
+        }
+    }
+}
+
 function* fetchNews(payload) {
     try {
         const news = yield call(Api.fetchNews, payload)
@@ -146,6 +168,7 @@ function* mySaga() {
     yield takeEvery(SAVE_MY_STOCKS, savemyStocks)
     yield takeEvery(SEARCH_MY_STOCKS, searchMyStocks)
     yield takeEvery(DELETE_MY_STOCKS, deleteMyStocks)
+    yield takeEvery(FETCH_CURRENT_RATE, getCurrentRate)
 }
 
 export default mySaga

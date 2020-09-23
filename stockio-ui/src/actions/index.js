@@ -12,7 +12,9 @@ import {
     FETCH_MY_STOCKS,
     SAVE_MY_STOCKS,
     SEARCH_MY_STOCKS,
-    DELETE_MY_STOCKS
+    DELETE_MY_STOCKS,
+    FETCH_CURRENT_RATE,
+    SET_CURRENT_RATE
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -64,10 +66,18 @@ export function savemyStocks(payload) {
 }
 
 export function searchmyStocks(payload) {
-    return { type: SEARCH_MY_STOCKS, payload}
+    return { type: SEARCH_MY_STOCKS, payload }
 }
 
 export function deleteMyStocks(payload) {
-    return { type: DELETE_MY_STOCKS, payload}
+    return { type: DELETE_MY_STOCKS, payload }
+}
+
+export function getCurrentRate(payload) {
+    return { type: FETCH_CURRENT_RATE, payload }
+}
+
+export function setCurrentRate(payload) {
+    return { type: SET_CURRENT_RATE, payload }
 }
 
