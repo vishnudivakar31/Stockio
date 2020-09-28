@@ -23,10 +23,17 @@ import {
     SEARCH_MY_STOCKS,
     DELETE_MY_STOCKS,
     FETCH_CURRENT_RATE,
-    SET_CURRENT_RATE
+    SET_CURRENT_RATE,
+    COMPUTE_TOP_VOLUME_STOCKS,
+    SET_TOP_VOLUME_STOCKS,
+    COMPUTE_RATES_CHART,
+    SET_RATES_CHART,
+    COMPUTE_RATES_VARIATION,
+    SET_RATES_VARIATION
 } from '../constants/action_types'
 
 const getMyStocks = state => state.stockReducer.myStocks
+const getCurrentRateFromState = state => state.stockReducer.currentRate
 
 function* loginToStockio(action) {
     try {
@@ -158,6 +165,36 @@ function* fetchNews(payload) {
     }
 }
 
+function* computeTopVolumeStocks() {
+    const current_rate = yield select(getCurrentRateFromState)
+    const color = ['#74b9ff', '#ffeaa7', '#00cec9', '#b2bec3', '#e17055', '#fab1a0', '#00b894']
+    let total = 0
+    let result = []
+    current_rate.forEach(rate => total += Number(rate.current_rate.volume))
+    current_rate.forEach((rate, i) => result.push({ name: rate.symbol, color: color[i], value: (parseFloat(rate.current_rate.volume)/parseFloat(total))}))
+    yield put({type: SET_TOP_VOLUME_STOCKS, payload: result})
+}
+
+function* computeRatesChart() {
+    const current_rate = yield select(getCurrentRateFromState)
+    let result = []
+    current_rate.forEach(rate => result.push({ name: rate.symbol, open: rate.current_rate.open, high: rate.current_rate.high, low: rate.current_rate.low, close: rate.current_rate.close}))
+    yield put({type: SET_RATES_CHART, payload: result})
+}
+
+function* computeRatesVariation() {
+    const current_rate = yield select(getCurrentRateFromState)
+    let result = []
+    current_rate.forEach(rate => {
+        let variance = ((rate.current_rate.high - rate.history[rate.history.length - 1].high) / rate.history[rate.history.length - 1].high) * 100
+        let color = '#dfe6e9'
+        if(variance > 0) color = '#00b894'
+        else if (variance < 0)color = '#d63031'
+        result.push({ name: rate.symbol, variance, color, current: rate.current_rate.high, prev: rate.history[rate.history.length - 1].high })
+    })
+    yield put({type: SET_RATES_VARIATION, payload: result})
+}
+
 function* mySaga() {
     yield takeEvery(LOGIN, loginToStockio)
     yield takeEvery(SIGNUP, signUpToStockio)
@@ -169,6 +206,9 @@ function* mySaga() {
     yield takeEvery(SEARCH_MY_STOCKS, searchMyStocks)
     yield takeEvery(DELETE_MY_STOCKS, deleteMyStocks)
     yield takeEvery(FETCH_CURRENT_RATE, getCurrentRate)
+    yield takeEvery(COMPUTE_TOP_VOLUME_STOCKS, computeTopVolumeStocks)
+    yield takeEvery(COMPUTE_RATES_CHART, computeRatesChart)
+    yield takeEvery(COMPUTE_RATES_VARIATION, computeRatesVariation)
 }
 
 export default mySaga

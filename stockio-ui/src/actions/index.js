@@ -14,7 +14,10 @@ import {
     SEARCH_MY_STOCKS,
     DELETE_MY_STOCKS,
     FETCH_CURRENT_RATE,
-    SET_CURRENT_RATE
+    SET_CURRENT_RATE,
+    COMPUTE_TOP_VOLUME_STOCKS,
+    COMPUTE_RATES_CHART,
+    COMPUTE_RATES_VARIATION
 } from '../constants/action_types'
 
 export function setUserToken(payload) {
@@ -81,3 +84,14 @@ export function setCurrentRate(payload) {
     return { type: SET_CURRENT_RATE, payload }
 }
 
+export function computeTopVolumeStocks(payload) {
+    return { type: COMPUTE_TOP_VOLUME_STOCKS, payload }
+}
+
+export function computeRatesChart(payload) {
+    return { type: COMPUTE_RATES_CHART, payload }
+}
+
+export function computeRatesVariation(payload) {
+    return { type: COMPUTE_RATES_VARIATION, payload }
+}
