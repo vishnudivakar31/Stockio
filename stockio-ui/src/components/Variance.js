@@ -15,7 +15,7 @@ class Variance extends Component {
         else if (variance < 0) icon = <TrendingDownIcon color={color} />
         
         return(
-            <div style={{ color, borderBottom: '1px solid #dfe6e9', margin: '2%', borderRight: '1px solid #dfe6e9', padding: '2%', width: '120px' }}>
+            <div style={{ color, borderBottom: '1px solid #dfe6e9', marginRight: '2%', marginTop: '2%', borderRight: '1px solid #dfe6e9', padding: '2%', width: '120px' }}>
                 <div style={{ display: "flex", fontSize: '18px' }}>
                     <div>{name}</div>
                     <div>{icon}</div>
