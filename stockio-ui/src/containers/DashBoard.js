@@ -49,18 +49,20 @@ class DashBoard extends Component {
                         <div style={{paddingLeft: '1%', paddingRight: '1%'}}>
                             <div style={{fontSize: '18px', fontWeight: 'normal'}}>Stock Growth</div>
                             <div style={{fontSize: '12px', fontWeight: 'lighter'}}>Check variance value to understand growth rate</div>
-                            {
-                                this.props.rateVarianceData.map((item, index) => (
-                                    <Variance
-                                        key={index}
-                                        name={item.name}
-                                        currentHigh={item.current}
-                                        prevHigh={item.prev}
-                                        variance={item.variance}
-                                        color={item.color}
-                                    />
-                                ))
-                            }
+                            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                {
+                                    this.props.rateVarianceData.map((item, index) => (
+                                        <Variance
+                                            key={index}
+                                            name={item.name}
+                                            currentHigh={item.current}
+                                            prevHigh={item.prev}
+                                            variance={item.variance}
+                                            color={item.color}
+                                        />
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

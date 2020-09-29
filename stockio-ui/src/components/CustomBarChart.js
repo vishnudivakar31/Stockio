@@ -10,7 +10,7 @@ class CustomBarChart extends Component {
         return(
             <div>
 				<div style={{fontSize: '18px', fontWeight: 'normal'}}>{title}</div>
-				<div style={{fontSize: '12px', fontWeight: 'lighter'}}>{subtitle}</div>
+				<div style={{fontSize: '12px', fontWeight: 'lighter', marginBottom: '1.5%' }}>{subtitle}</div>
 				<BarChart width={500} height={320} data={data}>
                     <XAxis dataKey="name" />
                     <YAxis />
