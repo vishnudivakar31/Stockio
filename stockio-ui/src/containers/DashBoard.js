@@ -7,11 +7,27 @@ import Paper from '@material-ui/core/Paper';
 import TopVolumeChart from '../components/Doughnut'
 import RatesChart from '../components/CustomBarChart'
 import Variance from '../components/Variance'
+import StockDetail from '../components/StockDetail'
+import Button from '@material-ui/core/Button'
 import { TableHead, TableRow } from '@material-ui/core';
 import { connect } from 'react-redux'
 import { getCurrentRate, fetchMyStocks, computeTopVolumeStocks, computeRatesChart, computeRatesVariation } from '../actions'
 
 class DashBoard extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            selected_stock: {
+                name: '',
+                current_rate: {},
+                history: []
+            },
+            display_stock: 'none'
+        }
+        this.showDetails = this.showDetails.bind(this)
+        this.closeDetails = this.closeDetails.bind(this)
+    }
     componentDidMount() {
         this.props.fetchMyStocks(this.props.user_token)
     } 
@@ -25,10 +41,39 @@ class DashBoard extends Component {
             this.props.computeRatesVariation()
         }
     }
+    showDetails(stock_data) {
+        let selected_stock = {
+            name: stock_data.name,
+            current_rate: stock_data.current_rate,
+            history: stock_data.history
+        }
+        this.setState({
+            selected_stock,
+            display_stock: 'block'
+        })
+    }
+    closeDetails() {
+        this.setState({
+            selected_stock: {
+                name: '',
+                current_rate: {},
+                history: []
+            },
+            display_stock: 'none'
+        })
+    }
     render() {
         const currentRate = this.props.current_rate
         return (
             <div className="current_rate">
+                <div className = 'show_details' style={{ display: this.state.display_stock }}>
+                    <StockDetail
+                        name={this.state.selected_stock.name}
+                        current_rate={this.state.selected_stock.current_rate}
+                        history={this.state.selected_stock.history}
+                        closeDetails={this.closeDetails}
+                    />
+                </div>
                 <div className="charts">
                     <div className="title">Charts</div>
                     <div style={{display: 'flex', marginLeft: '1%', marginRight: '1%'}}>
@@ -82,7 +127,7 @@ class DashBoard extends Component {
                             </TableHead>
                             <TableBody>
                                 {currentRate.map((row, index) => (
-                                    <TableRow key={`${index}`}>
+                                    <TableRow key={`${index}`} onClick={() => this.showDetails(row)} style={{ cursor: 'pointer' }}>
                                         <TableCell>{row.name}</TableCell>
                                         <TableCell>${row.current_rate.open}</TableCell>
                                         <TableCell>${row.current_rate.high}</TableCell>

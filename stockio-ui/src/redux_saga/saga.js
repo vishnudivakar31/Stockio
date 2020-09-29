@@ -178,7 +178,15 @@ function* computeTopVolumeStocks() {
 function* computeRatesChart() {
     const current_rate = yield select(getCurrentRateFromState)
     let result = []
-    current_rate.forEach(rate => result.push({ name: rate.symbol, open: rate.current_rate.open, high: rate.current_rate.high, low: rate.current_rate.low, close: rate.current_rate.close}))
+    current_rate.forEach(rate => {
+        result.push({ 
+            name: rate.symbol, 
+            open: parseFloat(rate.current_rate.open).toFixed(2), 
+            high: parseFloat(rate.current_rate.high).toFixed(2), 
+            low: parseFloat(rate.current_rate.low).toFixed(2), 
+            close: parseFloat(rate.current_rate.close).toFixed(2)
+        })
+    })
     yield put({type: SET_RATES_CHART, payload: result})
 }
 

@@ -159,3 +159,15 @@ body {
 .current_rate .title {
   font-size: 30px;
 }
+
+.current_rate .show_details {
+  display: block;
+  position: absolute;
+  background: white;
+  z-index: 100;
+  right: 0%;
+  left: 16.7%;
+  bottom: 0%;
+  top: 7%;
+  overflow: scroll;
+}
