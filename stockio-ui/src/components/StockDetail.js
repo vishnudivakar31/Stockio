@@ -55,7 +55,7 @@ class StockDetail extends Component {
                 </div>
                 <div style={{ display: 'flex' }}>
                     <div style={{ width: '70%', overflow: 'scroll' }}>
-                        <div style={{ fontSize: '15px' }}>Stock Trend</div>
+                        <div style={{ fontSize: '25px' }}>Stock Trend</div>
                         <div style={{ fontSize: '10px', marginBottom: '1%', fontWeight: 'lighter' }}>Scroll to view entire chart</div>
                         <BarChart
                             width={1500}
@@ -73,6 +73,7 @@ class StockDetail extends Component {
                         </BarChart>
                     </div>
                     <div style={{marginLeft: '1%', borderLeft: '1px solid #dfe6e9', paddingLeft: '1%', width: '30%' }}>
+                    <div style={{ fontSize: '25px', marginBotton: '1%' }}>Overview.</div>
                         <div style={{ fontSize: '15px' }}>Insight - Current</div>
                         <div style={{ fontSize: '10px', marginBottom: '1%', fontWeight: 'lighter' }}>Shows current open, high, low, close</div>
                         <div style={{ display: 'flex', justifyContent: 'space-between'}}>
@@ -81,7 +82,7 @@ class StockDetail extends Component {
                             <div style={{ marginRight: '2%', color: '#d63031' }}>low: ${current_rate.low}</div>
                             <div style={{ marginRight: '2%', color: '#b2bec3' }}>close: ${current_rate.close}</div>
                         </div>
-                        <div style={{ fontSize: '15px', marginTop: '1%', borderTop: '1px solid #dfe6e9' }}>Insight - Maximum</div>
+                        <div style={{ fontSize: '15px', marginTop: '2%', borderTop: '1px solid #dfe6e9' }}>Insight - Maximum</div>
                         <div style={{ fontSize: '10px', marginBottom: '1%', fontWeight: 'lighter' }}>Shows maximum open, high, low, close</div>
                         <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                             <div style={{ marginRight: '2%', color: '#0984e3' }}>open: ${maxOpen}</div>
@@ -89,7 +90,7 @@ class StockDetail extends Component {
                             <div style={{ marginRight: '2%', color: '#d63031' }}>low: ${maxLow}</div>
                             <div style={{ marginRight: '2%', color: '#b2bec3' }}>close: ${maxClose}</div>
                         </div>
-                        <div style={{ fontSize: '15px', marginTop: '1%', borderTop: '1px solid #dfe6e9' }}>Insight - Minimum</div>
+                        <div style={{ fontSize: '15px', marginTop: '2%', borderTop: '1px solid #dfe6e9' }}>Insight - Minimum</div>
                         <div style={{ fontSize: '10px', marginBottom: '1%', fontWeight: 'lighter' }}>Shows minimum open, high, low, close</div>
                         <div style={{ display: 'flex', justifyContent: 'space-between'}}>
                             <div style={{ marginRight: '2%', color: '#0984e3' }}>open: ${minOpen}</div>
