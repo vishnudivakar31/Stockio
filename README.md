@@ -7,6 +7,9 @@ Stockio is a platform where customers can sign up and list equity stock options.
 ## Dashboard
 ![alt dashboad](https://github.com/vishnudivakar31/Stockio/blob/master/Stockio-Screenshots/dashboard.png?raw=true)
 
+## Stock Details Page
+![alt details page](https://github.com/vishnudivakar31/Stockio/blob/master/Stockio-Screenshots/DetailsPage.png?raw=true)
+
 ## Watchlist
 ![alt watchlist](https://github.com/vishnudivakar31/Stockio/blob/master/Stockio-Screenshots/watchlist.png?raw=true)
 
